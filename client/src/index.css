@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ElevenWin - Neon Horizon Theme (Cyan/Mint/Coral) */
+  --background: 222 39% 5%;
+  --foreground: 210 50% 97%;
+  --card: 210 50% 9%;
+  --card-foreground: 210 50% 97%;
+  --popover: 210 50% 9%;
+  --popover-foreground: 210 50% 97%;
+  --primary: 197 100% 50%;
+  --primary-foreground: 222 39% 5%;
+  --secondary: 163 80% 47%;
+  --secondary-foreground: 222 39% 5%;
+  --muted: 210 47% 14%;
+  --muted-foreground: 218 16% 57%;
+  --accent: 11 100% 67%;
+  --accent-foreground: 210 50% 97%;
+  --destructive: 356 100% 64%;
+  --destructive-foreground: 210 50% 97%;
+  --border: 215 41% 19%;
+  --input: 210 46% 10%;
+  --ring: 197 100% 50%;
+  --success: 137 84% 65%;
+  --warning: 33 100% 64%;
+  --info: 197 100% 50%;
+  
+  /* ElevenWin signature colors - Neon Horizon */
+  --neon-cyan: 197 100% 50%;
+  --neon-mint: 163 80% 47%;
+  --neon-coral: 11 100% 67%;
+  --neon-amber: 33 100% 64%;
+  --neon-lime: 137 84% 65%;
+  
+  --radius: 0.75rem;
+  --font-sans: 'Manrope', system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    height: 100%;
+    background: var(--background);
+  }
+
+  body {
+    height: 100%;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    /* ElevenWin Neon Horizon gradients - cyan & mint spotlights */
+    background-image: 
+      radial-gradient(circle at 15% 85%, rgba(0, 182, 255, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 85% 15%, rgba(22, 217, 164, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255, 122, 89, 0.05) 0%, transparent 50%);
+    background-attachment: fixed;
+    background-size: 100% 100%;
+  }
+
+  #root {
+    min-height: 100vh;
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* Modern Card Styles */
+  .game-card {
+    @apply bg-card border border-border rounded-xl p-6 transition-all duration-300;
+    background: linear-gradient(135deg, var(--card) 0%, #13151c 100%);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.3),
+      0 2px 4px -1px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 20px 25px -5px rgba(0, 0, 0, 0.4),
+      0 10px 10px -5px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(0, 182, 255, 0.4),
+      0 0 30px rgba(0, 182, 255, 0.25);
+  }
+
+  /* Enhanced Card Glow */
+  .card-glow {
+    @apply bg-card border border-border rounded-xl transition-all duration-300;
+    background: linear-gradient(135deg, var(--card) 0%, #0D1824 100%);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.3),
+      0 2px 4px -1px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(0, 182, 255, 0.08);
+  }
+
+  .card-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 15px 20px -5px rgba(0, 0, 0, 0.4),
+      0 8px 10px -5px rgba(0, 0, 0, 0.2),
+      0 0 0 1px rgba(0, 182, 255, 0.3),
+      0 0 20px rgba(0, 182, 255, 0.2);
+  }
+
+  /* Primary Button */
+  .btn-primary {
+    @apply px-6 py-3 bg-primary text-primary-foreground rounded-lg font-semibold transition-all duration-300;
+    background: linear-gradient(135deg, var(--primary) 0%, #16D9A4 100%);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 182, 255, 0.35),
+      0 2px 4px -1px rgba(0, 182, 255, 0.15);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      0 6px 12px -2px rgba(0, 182, 255, 0.45),
+      0 4px 8px -2px rgba(0, 182, 255, 0.25),
+      0 0 20px rgba(0, 182, 255, 0.35);
+  }
+
+  /* Glass Effect */
+  .glass-effect {
+    background: rgba(17, 18, 23, 0.7);
+    backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Neon Text Effects */
+  .neon-text {
+    text-shadow: 
+      0 0 5px currentColor,
+      0 0 10px currentColor,
+      0 0 15px currentColor;
+  }
+
+  /* Stats Cards */
+  .stats-card {
+    @apply relative overflow-hidden;
+  }
+
+  .stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .stats-card:hover::before {
+    opacity: 1;
+  }
+
+  /* Enhanced borders */
+  .border-glow {
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .border-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(135deg, transparent, rgba(0, 182, 255, 0.5), transparent);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .border-glow:hover::before {
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  /* Typography */
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Animations */
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px rgba(0, 182, 255, 0.25);
+  }
+  to {
+    box-shadow: 0 0 20px rgba(0, 182, 255, 0.7);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
