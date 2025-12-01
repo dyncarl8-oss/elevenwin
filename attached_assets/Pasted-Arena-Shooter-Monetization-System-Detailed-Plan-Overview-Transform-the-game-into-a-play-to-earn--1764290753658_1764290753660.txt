@@ -1,0 +1,200 @@
+Arena Shooter Monetization System - Detailed Plan
+Overview
+Transform the game into a play-to-earn platform where players can:
+
+Deposit real money via Whop Pay-ins
+Create/join wager rooms with entry fees
+Earn in-game coins from solo play
+Purchase cosmetic skins with coins or real money
+Compete on leaderboards
+System Architecture
+1. Database Schema (MongoDB)
+Collections:
+📁 wallets
+├── userId (string, unique)
+├── balance (number) - Real money balance in cents
+├── coins (number) - In-game currency
+├── createdAt, updatedAt
+📁 transactions
+├── odellId (string, unique)
+├── odellId (string)
+├── type: "deposit" | "withdrawal" | "wager_entry" | "wager_win" | "skin_purchase"
+├── amount (number)
+├── currency: "usd" | "coins"
+├── status: "pending" | "completed" | "failed"
+├── metadata (object) - roomId, paymentId, etc.
+├── createdAt
+📁 skins
+├── skinId (string, unique)
+├── name (string)
+├── category: "pistol" | "sniper" | "crosshair"
+├── rarity: "common" | "rare" | "epic" | "legendary"
+├── priceUsd (number) - In cents
+├── priceCoins (number)
+├── colors/design data
+📁 user_skins (inventory)
+├── odellId (string)
+├── skinId (string)
+├── purchasedAt
+├── equipped (boolean)
+📁 leaderboards
+├── odellId (string)
+├── odellname (string)
+├── totalWins (number)
+├── totalLosses (number)
+├── totalEarnings (number) - In cents
+├── totalWagered (number)
+├── winStreak (number)
+├── bestWinStreak (number)
+├── totalKills (number)
+├── totalDeaths (number)
+├── kdRatio (number)
+├── soloWins (number)
+├── coinsEarned (number)
+├── lastUpdated
+📁 matches (enhanced)
+├── matchId (string)
+├── roomId (string)
+├── type: "free" | "wager" | "solo"
+├── entryFee (number) - 0 for free/solo
+├── prizePool (number)
+├── platformFee (number)
+├── winnerId (string)
+├── loserId (string)
+├── players: [{ odellId, odellname, kills, deaths, damageDealt }]
+├── duration (number)
+├── createdAt, endedAt
+
+2. Wallet & Deposit System (Whop Pay-ins)
+Flow:
+
+User clicks "Deposit" → Select amount ($5, $10, $25, $50, $100)
+Server creates Whop Checkout Configuration with metadata
+Whop iframe SDK opens payment modal
+User pays via card/crypto/BNPL
+Webhook payment.succeeded → Credit user wallet
+Balance updated in real-time
+Withdrawal (Future):
+
+Minimum withdrawal: $10
+Withdrawal to connected payment method
+Processing time: 1-3 business days
+3. Room Types & Entry Fees
+Room Type	Entry Fee	Winner Gets	Platform Cut
+Free Play	$0	0	0
+Solo vs Bot	0	50-100 coins	0
+$1 Wager	$1	$1.70	$0.30 (15%)
+$5 Wager	$5	$8.50	$1.50 (15%)
+$10 Wager	$10	$17.00	$3.00 (15%)
+$25 Wager	$25	$42.50	$7.50 (15%)
+Room Creation Flow:
+
+Player selects room type (Free / Wager)
+If wager: Select entry fee amount
+System checks wallet balance ≥ entry fee
+Entry fee held in escrow (deducted from wallet)
+Second player joins → Same balance check & escrow
+Match starts → Winner determined
+Prize distributed to winner, platform fee collected
+4. In-Game Coins System
+Earning Coins:
+
+Activity	Coins Earned
+Solo Win vs Bot	50-100
+Solo Win Streak Bonus	+25 per consecutive win
+Daily First Win	+50 bonus
+Headshot Kill	+5
+Perfect Game (no deaths)	+100
+Spending Coins:
+
+Buy weapon skins from store
+Cannot convert to real money (prevents gambling issues)
+5. Cosmetic Skin Store
+Pistol Skins:
+
+Skin	Rarity	USD	Coins
+Carbon Black	Common	$1	500
+Gold Plated	Rare	$3	1500
+Neon Pulse	Epic	$5	3000
+Dragon Fire	Legendary	$10	6000
+Sniper Skins:
+
+Skin	Rarity	USD	Coins
+Arctic White	Common	$1.50	750
+Blood Moon	Rare	$4	2000
+Cyber Strike	Epic	$7	4000
+Void Reaper	Legendary	$15	8000
+6. Leaderboard System
+Leaderboard Categories:
+
+Top Earners - Sorted by total earnings (wager wins)
+Win Rate - Highest win percentage (min 10 matches)
+Kill Masters - Most total kills
+Win Streak - Current/Best win streaks
+Coin Grinders - Most coins earned (solo players)
+Time Filters:
+
+All Time
+This Month
+This Week
+Today
+7. UI Components Needed
+New Screens:
+
+Wallet Screen - Balance, deposit button, transaction history
+Skin Store - Browse/buy skins, preview on weapons
+Inventory - Owned skins, equip/unequip
+Leaderboards - Category tabs, player rankings
+Enhanced Lobby - Room type selector, wager options
+Lobby Updates:
+
+"Create Free Room" / "Create Wager Room" buttons
+Entry fee selector ($1, $5, $10, $25)
+Balance display in header
+Room cards show entry fee badge
+"Insufficient funds" warning if balance too low
+8. Server Endpoints Needed
+Wallet:
+
+POST /api/wallet/deposit - Create Whop checkout
+POST /api/webhook/payment - Handle Whop payment webhook
+GET /api/wallet/balance - Get user balance
+GET /api/wallet/transactions - Transaction history
+Skins:
+
+GET /api/skins - List all skins
+POST /api/skins/purchase - Buy skin (coins or USD)
+GET /api/skins/inventory - User's owned skins
+POST /api/skins/equip - Equip a skin
+Leaderboards:
+
+GET /api/leaderboard/:category - Get rankings
+GET /api/leaderboard/player/:userId - Player stats
+Game Server (WebSocket) Updates:
+
+create_wager_room - Create room with entry fee
+join_wager_room - Join and pay entry fee
+Match end → Distribute winnings, update leaderboards
+9. Implementation Order
+Phase	Tasks	Priority
+Phase 1	MongoDB setup, Wallet system, Deposit via Whop	HIGH
+Phase 2	Wager room creation/joining, Escrow system	HIGH
+Phase 3	Match completion → Prize distribution	HIGH
+Phase 4	Leaderboard tracking & display	MEDIUM
+Phase 5	Coins earning from solo play	MEDIUM
+Phase 6	Skin store & inventory	MEDIUM
+Phase 7	Skin rendering on weapons	LOW
+10. Security Considerations
+All money operations server-authoritative
+Webhook signature verification for Whop
+Rate limiting on deposit/purchase endpoints
+Balance checks before room joins
+Match results validated server-side only
+No client-side balance manipulation possible
+Revenue Projections
+Assuming 100 wager matches/day at average $5 entry:
+
+Daily pot: $1,000 (100 × $5 × 2 players)
+Daily platform revenue: $150 (15% cut)
+Monthly platform revenue: ~$4,500
+Plus direct skin sales as bonus revenue.

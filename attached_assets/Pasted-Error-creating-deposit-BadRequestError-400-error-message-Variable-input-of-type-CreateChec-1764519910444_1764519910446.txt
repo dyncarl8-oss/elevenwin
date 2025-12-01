@@ -1,0 +1,36 @@
+Error creating deposit: BadRequestError: 400 {"error":{"message":"Variable $input of type CreateCheckoutSessionInput! was provided invalid value for plan.currency (Expected value to not be null)","type":"bad_request"}}
+    at Function.generate (/home/runner/workspace/node_modules/@whop/sdk/src/core/error.ts:60:14)
+    at Whop.makeStatusError (/home/runner/workspace/node_modules/@whop/sdk/src/client.ts:551:28)
+    at Whop.makeRequest (/home/runner/workspace/node_modules/@whop/sdk/src/client.ts:770:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async <anonymous> (/home/runner/workspace/server/wallet-routes.ts:109:28) {
+  status: 400,
+  headers: Headers {
+    date: 'Sun, 30 Nov 2025 16:24:38 GMT',
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': '173',
+    connection: 'keep-alive',
+    'cf-ray': '9a6bb2370f583a17-BOM',
+    'cache-control': 'no-cache',
+    'referrer-policy': 'strict-origin-when-cross-origin',
+    'strict-transport-security': 'max-age=63072000; includeSubDomains',
+    vary: 'Accept, Origin',
+    'x-content-type-options': 'nosniff',
+    'x-frame-options': 'SAMEORIGIN',
+    'x-permitted-cross-domain-policies': 'none',
+    'x-request-id': '9a830eab-0ada-4b12-b9c6-e36999d7c7c3',
+    'x-runtime': '0.011275',
+    'x-xss-protection': '0',
+    'cf-cache-status': 'DYNAMIC',
+    'set-cookie': '__cf_bm=m5Rbuzynn7.N6moocpl6pJNz99sVaCiqX9rmjoI8gn0-1764519878-1.0.1.1-odvnUHEo6pIyVESofiggNx1lnmvQXLQAMQ1Ky9VIzDmn5JCXJoBusow.BqJna1MAxUfckJZl1bL2wgJpyuo8epVo562JhYuDXOb9YqdHwh0; path=/; expires=Sun, 30-Nov-25 16:54:38 GMT; domain=.whop.com; HttpOnly; Secure; SameSite=None',
+    server: 'cloudflare',
+    'alt-svc': 'h3=":443"; ma=86400'
+  },
+  error: {
+    error: {
+      message: 'Variable $input of type CreateCheckoutSessionInput! was provided invalid value for plan.currency (Expected value to not be null)',
+      type: 'bad_request'
+    }
+  }
+}
+4:24:38 PM [express] POST /api/wallet/deposit 500 in 679ms :: {"error":"Failed to create deposit"}
